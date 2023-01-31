@@ -1,0 +1,2 @@
+- Principal Component Analysis (PCA)
+- Linear Discriminant Analysis (LDA)

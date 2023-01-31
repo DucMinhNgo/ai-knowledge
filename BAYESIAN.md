@@ -1,0 +1,2 @@
+- Naive Bayes
+- Gaussian naive Bayes

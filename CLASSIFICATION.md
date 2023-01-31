@@ -1,0 +1,4 @@
+- Linear Classifier
+- Support Vector Machine (SVM)
+- Kernel SVM
+- Sparse Representation-based classification (SRC)
