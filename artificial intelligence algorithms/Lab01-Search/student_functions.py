@@ -1,6 +1,7 @@
 import numpy as np
 from collections import deque
 from queue import PriorityQueue
+import heapq
 
 def BFS(matrix, start, end):
     """
@@ -80,11 +81,40 @@ def DFS(matrix, start, end):
     path: list
         Founded path
     """
+    def dfs_recursive(current_node, visited, path):
+        """
+        Recursive helper function for DFS
+        """
+        # Mark the current node as visited
+        visited[current_node] = True
+
+        # Append the current node to the path
+        path.append(current_node)
+
+        # Check if the current node is the end node
+        if current_node == end:
+            return True
+
+        # Find all adjacent nodes of the current node
+        neighbors = np.nonzero(matrix[current_node])[0]
+
+        # Explore unvisited neighbors
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                # Recursively call DFS for unvisited neighbors
+                if dfs_recursive(neighbor, visited, path):
+                    return True
+
+        # If the end node is not found in the current path, backtrack
+        path.pop()
+        return False
 
     # TODO: 
     
     path=[]
     visited={}
+
+    dfs_recursive(start, visited, path)
    
     return visited, path
 
@@ -110,9 +140,35 @@ def UCS(matrix, start, end):
         Founded path
     """
     # TODO:  
-    # path=[]
-    # visited={}
-    # return visited, path
+    priority_queue = [(0, start)]
+    path=[]
+    visited={}
+     # UCS algorithm
+    while priority_queue:
+        # Dequeue a node with the lowest cost
+        current_cost, current_node = heapq.heappop(priority_queue)
+
+        # Check if the current node is the end node
+        if current_node == end:
+            # Reconstruct the path from end to start
+            while current_node is not None:
+                path.insert(0, current_node)
+                current_node = visited[current_node]
+            break
+
+        # Find all adjacent nodes of the current node
+        neighbors = np.nonzero(matrix[current_node])[0]
+
+        # Explore unvisited neighbors
+        for neighbor in neighbors:
+            # Calculate the cost to reach the neighbor
+            neighbor_cost = current_cost + matrix[current_node, neighbor]
+
+            # Enqueue the neighbor if not visited or with a lower cost
+            if neighbor not in visited or neighbor_cost < visited[neighbor][0]:
+                visited[neighbor] = (neighbor_cost, current_node)
+                heapq.heappush(priority_queue, (neighbor_cost, neighbor))
+    return visited, path
     
 
 def IDS(matrix, start, end):
