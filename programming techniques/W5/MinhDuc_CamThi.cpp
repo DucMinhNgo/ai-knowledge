@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#define N 50
 struct phanso
 {
     long tu, mau;
@@ -12,51 +13,44 @@ void inputFraction(PHANSO &t);
 
 void inputFraction(PHANSO &t)
 {
-    printf("vui long nhap tu so: ");
+    printf("Input numerator: ");
     scanf("%ld", &t.tu);
-    printf("vui long nhap mau so: ");
+    printf("Input denominator: ");
     scanf("%ld", &t.mau);
 }
 
-long GCD(long x, long y)
+void inputFractionArray(int &m, PHANSO b[N])
 {
-    long n1, n2;
-    if (x > y)
+    do
     {
-        n1 = x;
-        n2 = y;
-    }
-    else
-    {
-        n1 = y;
-        n2 = x;
-    }
+        printf("Input m: ");
+        scanf("%d", &m);
+    } while (m <= 0 || m > N);
 
-    while (n1 != n2)
+    for (int i = 0; i < m; i++)
     {
-        if (n1 > n2)
-            n1 -= n2;
-        else
-            n2 -= n1;
+        printf("Input Fraction b[%d]:\n", i + 1);
+        inputFraction(b[i]);
     }
+}
 
-    return n1;
+long GCD(long a, long b)
+{
+    while (b != 0)
+    {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
 }
 
 PHANSO reduce(PHANSO &ps)
 {
-    int ucln = GCD(ps.tu, ps.mau);
-    ps.tu = ps.tu / ucln;
-    ps.mau = ps.mau / ucln;
+    int gcd = GCD(ps.tu, ps.mau);
 
-    if (ps.mau != 1)
-    {
-        if (ps.mau < 0)
-        {
-            ps.mau = ps.mau * -1;
-            ps.tu = ps.tu * -1;
-        }
-    }
+    ps.tu /= gcd;
+    ps.mau /= gcd;
 
     return ps;
 }
@@ -66,12 +60,48 @@ void showFraction(PHANSO t)
     printf("%ld / %ld \n", t.tu, t.mau);
 }
 
+void showFactionArray(int m, PHANSO b[N])
+{
+    for (int i = 0; i < m; i++)
+    {
+        printf("Show Fraction b[%d]:\n", i + 1);
+        showFraction(b[i]);
+    }
+}
+
 PHANSO operator+(PHANSO t1, PHANSO t2)
 {
     PHANSO t;
     t.tu = t1.tu * t2.mau + t1.mau * t2.tu;
     t.mau = t1.mau * t2.mau;
     return reduce(t);
+}
+
+PHANSO operator+=(PHANSO &t1, PHANSO t2)
+{
+    PHANSO t;
+    t.tu = t1.tu * t2.mau + t1.mau * t2.tu;
+    t.mau = t1.mau * t2.mau;
+
+    t1 = reduce(t);
+    return t1;
+}
+
+PHANSO operator-(PHANSO t1, PHANSO t2)
+{
+    PHANSO t;
+    t.tu = t1.tu * t2.mau - t1.mau * t2.tu;
+    t.mau = t1.mau * t2.mau;
+    return reduce(t);
+}
+
+PHANSO operator-=(PHANSO &t1, PHANSO t2)
+{
+    PHANSO t;
+    t.tu = t1.tu * t2.mau - t1.mau * t2.tu;
+    t.mau = t1.mau * t2.mau;
+    t1 = reduce(t);
+    return t1;
 }
 
 int operator==(PHANSO t1, PHANSO t2)
@@ -116,14 +146,6 @@ int operator<(PHANSO t1, PHANSO t2)
     return 0;
 }
 
-PHANSO operator-(PHANSO t1, PHANSO t2)
-{
-    PHANSO t;
-    t.tu = t1.tu * t2.mau - t1.mau * t2.tu;
-    t.mau = t1.mau * t2.mau;
-    return t;
-}
-
 PHANSO operator*(PHANSO t1, PHANSO t2)
 {
     PHANSO t;
@@ -140,9 +162,55 @@ PHANSO operator/(PHANSO t1, PHANSO t2)
     return reduce(t);
 }
 
+PHANSO findLargestElementInFraction(int m, PHANSO t[N])
+{
+    PHANSO max = t[0];
+    for (int i = 1; i < m; i++)
+    {
+        if (t[i] > max)
+        {
+            max = t[i];
+        }
+    }
+
+    return max;
+}
+
+PHANSO sumOfFactionArray(int m, PHANSO t[N])
+{
+    PHANSO sum = t[0];
+    for (int i = 1; i < m; i++)
+    {
+        sum += t[i];
+    }
+
+    return reduce(sum);
+}
+
+void arrangingFactionArray(int m, PHANSO t[N])
+{
+    for (int i = 0; i < m - 1; i++)
+    {
+        for (int j = i + 1; j < m; j++)
+        {
+            if (t[i] > t[j])
+            {
+                PHANSO tempt;
+                tempt = t[i];
+                t[i] = t[j];
+                t[j] = tempt;
+            }
+        }
+    }
+}
+
 int main()
 {
-    PHANSO t = {1, 2}, s = {2, 4};
+    PHANSO t, s;
+    printf("Input Fraction t:\n");
+    inputFraction(t);
+    printf("Input Fraction s:\n");
+    inputFraction(s);
     showFraction(t + s);
     showFraction(t - s);
     showFraction(t * s);
@@ -153,7 +221,17 @@ int main()
     printf("%d \n", t >= s);
     printf("%d \n", t < s);
     printf("%d \n", t <= s);
-    // printf("%d \n", t == s);
+    showFraction(t += s);
+    showFraction(t -= s);
+
+    PHANSO b[N];
+    int m;
+    inputFractionArray(m, b);
+    showFactionArray(m, b);
+    showFraction(findLargestElementInFraction(m, b));
+    showFraction(sumOfFactionArray(m, b));
+    arrangingFactionArray(m, b);
+    showFactionArray(m, b);
 
     return 0;
 }

@@ -57,8 +57,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": ".",
-      "program": "build/Debug/outDebug"
+      "cwd": "/Users/dustin/Desktop/Tech/ai-knowledge/C_C++",
+      "program": "/Users/dustin/Desktop/Tech/ai-knowledge/C_C++/build/Debug/outDebug"
     }
   ]
 }
