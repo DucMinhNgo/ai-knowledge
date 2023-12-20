@@ -21,7 +21,7 @@ import (
 // Requirements:
 // The First few bytes must contain 0s
 
-const Difficulty = 12
+const Difficulty = 12 // 18
 
 type ProofOfWork struct {
 	Block  *Block
@@ -63,7 +63,27 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 
 		fmt.Printf("\r%x", hash)
 		intHash.SetBytes(hash[:])
+
+		if intHash.Cmp(pow.Target) == -1 {
+			break
+		} else {
+			nonce++
+		}
 	}
+	fmt.Println()
+
+	return nonce, hash[:]
+}
+
+func (pow *ProofOfWork) Validate() bool {
+	var intHash big.Int
+
+	data := pow.InitData(pow.Block.Nonce)
+
+	hash := sha256.Sum256(data)
+	intHash.SetBytes(hash[:])
+
+	return intHash.Cmp(pow.Target) == -1
 }
 
 func ToHex(num int64) []byte {
