@@ -1,33 +1,26 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	bc "lab01/blockchain"
-	"time"
 )
 
 func main() {
-	firstBlock := bc.Block{
-		Timestamp:     time.Now().Unix(),
-		Transactions:  []*bc.Transaction{{Data: []byte("Genesis Transaction")}},
-		PrevBlockHash: []byte{},
-		Hash:          []byte{},
+	// Create a new blockchain
+	blockchain := bc.NewBlockchain()
+
+	// Add some transactions
+	transactions1 := []*bc.Transaction{
+		{Data: []byte("Transaction 1")},
+		{Data: []byte("Transaction 2")},
 	}
-	firstBlock.Hash = bc.CalculateHash(firstBlock.Timestamp, firstBlock.Transactions, firstBlock.PrevBlockHash)
+	blockchain.AddBlock(transactions1)
 
-	var Blockchain []bc.Block
-	Blockchain = append(Blockchain, firstBlock)
-
-	for i := 1; i < 5; i++ {
-		newTransactions := []*bc.Transaction{{Data: []byte(fmt.Sprintf("Transaction #%d", i))}}
-		newBlock := bc.GenerateBlock(Blockchain[len(Blockchain)-1], newTransactions)
-		if bc.IsBlockValid(newBlock, Blockchain[len(Blockchain)-1]) {
-			Blockchain = append(Blockchain, newBlock)
-			fmt.Printf("Block #%d has been added to the Blockchain!\n", newBlock.Timestamp)
-		}
+	transactions2 := []*bc.Transaction{
+		{Data: []byte("Transaction 3")},
+		{Data: []byte("Transaction 4")},
 	}
+	blockchain.AddBlock(transactions2)
 
-	blockchainJSON, _ := json.MarshalIndent(Blockchain, "", "  ")
-	fmt.Printf("Blockchain:\n%s\n", blockchainJSON)
+	// Print the blockchain
+	blockchain.PrintBlockchain()
 }
