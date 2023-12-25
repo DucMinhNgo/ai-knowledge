@@ -6,6 +6,10 @@ https://www.youtube.com/watch?v=mYlHT9bB6OE&list=PLpP5MQvVi4PGmNYGEsShrlvuE2B33x
 
 > go mod init [blockchain-system]
 
+> go mod tidy
+
+> goclean
+
 - Smart contract: Mục đích của điều này là tạo ra các điều khoản mà không cần sự
   can thiệp của bên thứ 3. Tự động thực hiện và ghi lại các hành động pháp lý
   của các bên giúp cho việc truy dấu dễ dàng hơn bao gồm 4 yếu tố:
