@@ -77,6 +77,18 @@ https://www.youtube.com/watch?v=mYlHT9bB6OE&list=PLpP5MQvVi4PGmNYGEsShrlvuE2B33x
   - Tấn công cuộc đua
   - Tấn công Finney
 
+- Merkle Tree (cây băm nhị phân)
+  https://insider.blockchainwork.net/merkle-tree-cay-merkle-la-gi#:~:text=Blockchain%20l%C3%A0%20m%E1%BB%99t%20s%E1%BB%95%20c%C3%A1i,Tree%E2%80%9D%20(C%C3%A2y%20Merkle).
+  Sử dụng để mã hóa dữ liệu chuỗi khối hiệu quả và an toàn hơn.
+
+* Cây merkle tóm tắt tất cả các giao dịch trong một khối và tạo ra dấu vân tay
+  kỹ thuật số (giá trị băm) của toàn bộ các giao dịch đó, từ đó người dùng có
+  thể xác minh xem giao dịch có tồn tại trong khối đó hay không
+* Mỗi nút không phải nút là là một hàm băm của hàm trước đó còn nút là thì sẽ là
+  hàm băm của giao dịch
+
+- Buffer, byte type (https://zetcode.com/golang/byte/)
+
 # https://academy.binance.com/vi/articles/what-is-public-key-cryptography
 
 # Mã khóa công khai là gì

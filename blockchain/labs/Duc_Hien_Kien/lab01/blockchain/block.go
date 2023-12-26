@@ -1,7 +1,6 @@
 package blockchain
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"fmt"
 	"time"
@@ -9,7 +8,6 @@ import (
 
 // Transaction represents a transaction in the blockchain.
 type Transaction struct {
-	ID   string
 	Data []byte
 }
 
@@ -23,20 +21,13 @@ type Block struct {
 }
 
 // Blockchain represents the entire blockchain.
-// []*Block allow modified data
 type Blockchain struct {
 	blocks []*Block
 }
 
 // CalculateHash calculates the hash of a block.
-// %d: base 10 (integer)
-// %x: base 16, with lower-case letters for a-f (integer)
-// ----------------------------------------------------------------
-// hash[:]: hash[:] is a slice of bytes ([]byte) created from the array hash.
-// It represents the same data as the original array, but in a more flexible slice form.
-// This is often more convenient for passing around and working with in Go, especially when interacting with other functions or libraries
 func (b *Block) CalculateHash() []byte {
-	data := fmt.Sprintf("%d%x%x%x", b.Timestamp, b.Transactions, b.PrevBlockHash, b.MerkleRoot)
+	data := fmt.Sprintf("%d%d%x%x%x", b.Timestamp, b.Transactions, b.PrevBlockHash, b.MerkleRoot)
 	hash := sha256.Sum256([]byte(data))
 	return hash[:]
 }
@@ -112,52 +103,8 @@ func (bc *Blockchain) PrintBlockchain() {
 		fmt.Printf("Hash: %x\n", block.Hash)
 		fmt.Println("Transactions:")
 		for _, tx := range block.Transactions {
-			fmt.Printf("ID: %s, Data: %s\n", tx.ID, string(tx.Data))
+			fmt.Printf("Data: %s\n", string(tx.Data))
 		}
 		fmt.Println()
 	}
-}
-
-// VerifyTransactionInMerkleTree checks if a transaction with a given ID is included in the Merkle tree.
-func VerifyTransactionInMerkleTree(merkleRoot []byte, transactions []*Transaction) bool {
-	// Convert the transaction ID to bytes
-	// txIDBytes := []byte(txID)
-
-	// Calculate the Merkle root of the transactions
-	calculatedMerkleRoot := CalculateMerkleRoot(transactions)
-
-	fmt.Println(calculatedMerkleRoot)
-	fmt.Println(merkleRoot)
-
-	// Check if the calculated Merkle root matches the expected Merkle root
-	return bytes.Equal(calculatedMerkleRoot, merkleRoot)
-}
-
-// TransactionExists checks whether a transaction with a given ID exists in the block.
-func (b *Block) TransactionExists(txID string) bool {
-	// Calculate the Merkle root of the block's transactions
-	merkleRoot := CalculateMerkleRoot(b.Transactions)
-
-	// Iterate through each transaction in the block
-	for _, tx := range b.Transactions {
-		// Check if the transaction ID matches the target ID
-		if tx.ID == txID {
-			// Verify the transaction's inclusion in the Merkle tree
-			return VerifyTransactionInMerkleTree(merkleRoot, b.Transactions)
-		}
-	}
-
-	return false
-}
-
-// TransactionExists checks whether a transaction with a given ID exists in the blockchain.
-func (bc *Blockchain) TransactionExists(txID string) bool {
-	// Iterate through each block in the blockchain
-	for _, block := range bc.blocks {
-		// Check if the transaction ID exists in the current block's transactions
-		if txExists := block.TransactionExists(txID); txExists {
-			return true
-		}
-	}
-	return false
 }
