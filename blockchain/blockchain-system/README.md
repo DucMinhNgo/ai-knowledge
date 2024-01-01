@@ -8,7 +8,7 @@ https://www.youtube.com/watch?v=mYlHT9bB6OE&list=PLpP5MQvVi4PGmNYGEsShrlvuE2B33x
 
 > go mod tidy
 
-> goclean
+> go clean
 
 - Smart contract: Mục đích của điều này là tạo ra các điều khoản mà không cần sự
   can thiệp của bên thứ 3. Tự động thực hiện và ghi lại các hành động pháp lý
