@@ -13,5 +13,8 @@
     "dotenv": "^16.3.1",
     "hardhat": "^2.19.4",
     "openzeppelin-solidity": "^4.8.1"
+  },
+  "dependencies": {
+    "web3": "^4.3.0"
   }
 }
